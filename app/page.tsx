@@ -98,6 +98,7 @@ export default function Home() {
           read={fetchObjects}
           update={updateObject}
           remove={deleteObjects}
+          setObjs={setObjects}
         />
       </div>
 
