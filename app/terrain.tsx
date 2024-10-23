@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from 'react';
 
-export default function  Terrain(props: { objs: any; create: Function; read: Function;
-  update: Function; delete: Function;
+export default function  Terrain(props: { objs: any, create: () => void, read: () => void,
+  update: () => void, remove: () => void
 }) {
   
     var   ctx, w: number, h: number;
@@ -23,7 +23,15 @@ export default function  Terrain(props: { objs: any; create: Function; read: Fun
         ctx.stroke();
       }
     }
+
+    var   setup_events = canvas => {
+      canvas.onmousedown = e => console.log("mousedown e.x: ", e.clientX, "; e.y: ", e.clientY);
+      canvas.onmousemove = e => console.log("mousemove e.x: ", e.clientX, "; e.y: ", e.clientY);
+      canvas.onmouseup = e => console.log("mouseup e.x: ", e.clientX, "; e.y: ", e.clientY);
+    }
   
+    ///////////////////////// ANIMATE ///////////////////////////
+
     var animate = (ctx: any) => {
       ctx.clearRect(0, 0, w, h);
       ctx.strokeStyle = "#343434";
@@ -38,6 +46,8 @@ export default function  Terrain(props: { objs: any; create: Function; read: Fun
   
       //requestAnimationFrame(() => animate(ctx))
     }
+
+    ////////////////////////////////////////////////////
   
     useEffect(() => {
       var     canvas = document.getElementById("canvas");
@@ -48,6 +58,7 @@ export default function  Terrain(props: { objs: any; create: Function; read: Fun
       h = canvas.height = terrain?.offsetHeight;
       ctx.lineWidth = 1;
       
+      setup_events(canvas);
       animate(ctx);
   
     }, [])

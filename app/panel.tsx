@@ -2,8 +2,8 @@ import { Object } from '@prisma/client';
 import { useState, useEffect } from 'react';
 
 
-export default function Panel (props: { objs: any; create: Function; read: Function;
-  update: Function; remove: Function;
+export default function Panel (props: { objs: any, create: () => void, read: () => void,
+  update: () => void, remove: () => void
 }) {
   const [s_id, setS_id] = useState<number>(0);
   const [s_name, setS_name] = useState<string>('');
@@ -37,8 +37,9 @@ export default function Panel (props: { objs: any; create: Function; read: Funct
   useEffect(() => {
     if (props.objs.length) {
       setSelected(props.objs[0]);
+      console.log("selected: ", props.objs[0]);
     }
-  }, []);
+  }, [props.objs]);
 
   return (
     <div id="panel">
@@ -52,9 +53,11 @@ export default function Panel (props: { objs: any; create: Function; read: Funct
             <div id="drop_down_content" >
               {
                 props.objs.map((object: Object) => (
-                  <p onClick={() => {
-                    setSelected(object);
-                  }} >{object.name}</p>
+                      object.id != s_id ?
+                        <p key={object.id} onClick={() => {
+                          setSelected(object);
+                        }}>{object.name}</p>
+                      : null
                 ))
               }
             </div>
@@ -75,8 +78,20 @@ export default function Panel (props: { objs: any; create: Function; read: Funct
 
       </div>
       <div>
-        <button onClick={() => update(s_id, s_name, s_radius, s_mass, s_x, s_y, s_vx, s_vy, s_ax, s_ay)} >SAVE</button>
-        <button onClick={() => remove(s_id)} >DELETE</button>
+        <button onClick={() => {
+          let target = props.objs.find((({id}) => id == s_id));
+          if (target != undefined) {
+            props.update(s_id, s_name, s_radius, s_mass, s_x, s_y, s_vx, s_vy, s_ax, s_ay);
+            props.read();
+          }
+        }} >SAVE</button>
+        <button onClick={() => {
+          let target = props.objs.find((({id}) => id == s_id));
+          if (target != undefined) {
+            props.remove(s_id);
+            props.read();
+          }
+          }} >DELETE</button>
       </div>
     </div>
   );
