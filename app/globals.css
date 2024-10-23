@@ -1,29 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --black-zero: #000;
+  --black-one: #343434;
+  --black-two: #535353;
+  --white-one: #d9d9d9;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--white-one);
+  background: var(--black-zero)
 }
 
 * {
@@ -47,8 +31,119 @@ main {
   flex-direction: column;
 }
 
+p, li {
+  font-size: 1em;
+  color: var(--white-one);
+  font-family: monospace;
+  text-transform: uppercase;
+  line-height: 18px;
+}
+
 main {
-  height: 80%;
-  width: 80%;
+  height: 95%;
+  width: 95%;
   border: 1px solid #fff;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+main > div {
+  height: 100%;
+}
+
+main > div:nth-child(1) {
+  width: 30%;
+  border: 1px solid red;
+  justify-content: space-around;
+}
+
+main > div:nth-child(2) {
+  width: 60%;
+  border: 1px solid yellow;
+}
+
+#panel {
+  width: 80%;
+  height: 60%;
+  border: 1px solid rgb(27, 62, 219);
+}
+
+main > div:nth-child(1) > ul {
+  border: 1px solid magenta;
+  list-style: circle;
+  padding: 10px;
+}
+
+#terrain {
+  border: 1px solid blue;
+  height: 80%;
+  width: 90%;
+}
+
+
+@media only screen and (max-width: 1500px) {
+  main {
+    flex-direction: column;
+  }
+  main > div:nth-child(1) {
+    width: 50%;
+    height: 50%;
+  }
+  main > div:nth-child(2) {
+    width: 80%;
+    height: 50%;
+  }
+  #terrain {
+    height: 99%;
+    width: 99%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  main > div:nth-child(1) > ul {
+    display: none;
+  }
+  #panel {
+    height: 99%;
+    width: 99%;
+  }
+  #terrain {
+    height: 99%;
+    width: 99%;
+  }
+  main > div:nth-child(1), main > div:nth-child(2) {
+    width: 100%;
+  }
+}
+
+#canvas{
+  height: 100%;
+  width: 100%;
+  border: 1px solid var(--white-one);
+}
+
+#panel {
+  justify-content: space-between;
+}
+
+#panel > div {
+  border: 1px solid brown;
+  width: 90%;
+}
+
+#panel > div:nth-child(1) {
+  height: 10%;
+}
+
+#panel > div:nth-child(2) {
+  height: 10%;
+}
+#panel > div:nth-child(3) {
+  height: 60%;
+}
+
+#panel > div:nth-child(4) {
+  flex-direction: row;
+  justify-content: space-around;
+  height: 10%;
 }
