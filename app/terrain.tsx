@@ -55,6 +55,7 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       ctx = canvas.getContext("2d");
       w = canvas.width = terrain?.offsetWidth;
       h = canvas.height = terrain?.offsetHeight;
+      console.log(rect.top, rect.left);
       margin_x.current = rect.left;
       margin_y.current = rect.top;
       ctx.lineWidth = 1;
@@ -74,7 +75,7 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
     
     return (
       <div id="terrain">
-        <canvas id="canvas" onClick={e => props.create(e.clientX - maring_x.current, e.clientY - margin_y.current)} >something went wrong!</canvas>
+        <canvas id="canvas" onClick={e => props.create(e.clientX - margin_x.current, e.clientY - margin_y.current)} >something went wrong!</canvas>
       </div>
     )
   }
