@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 export default function  Terrain(props: { objs: any, create: () => void, read: () => void,
   update: () => void, remove: () => void
 }) {
-  
+    const [requestID, setRequestID] = useState<any>(null);
     var   ctx, w: number, h: number;
   
     var draw_background = (ctx: any) => {
@@ -55,14 +55,14 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       ctx.strokeStyle = "#343434";
       draw_background(ctx);
       ctx.strokeStyle = "#ffffff";
-  
+      
       for (let i = 0; i < props.objs.length; i++) {
         ctx.beginPath();
         ctx.arc(props.objs[i].x, props.objs[i].y, props.objs[i].radius, 0, 2 * Math.PI);
         ctx.stroke();
       }
 
-      requestAnimationFrame(() => animate(ctx))
+      setRequestID(requestAnimationFrame(() => animate(ctx)))
     }
 
     ////////////////////////////////////////////////////
@@ -78,8 +78,14 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       
       setup_events(canvas, false);
       animate(ctx);
+
+
+      return    () => {
+        reset_events(canvas);
+        cancelAnimationFrame(requestID);
+      }
   
-    }, [])
+    }, [props.objs])
   
     return (
       <div id="terrain">
