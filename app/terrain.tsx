@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function  Terrain(props: { objs: any, create: () => void, read: () => void,
   update: () => void, remove: () => void
@@ -24,10 +24,28 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       }
     }
 
-    var   setup_events = canvas => {
-      canvas.onmousedown = e => console.log("mousedown e.x: ", e.clientX, "; e.y: ", e.clientY);
-      canvas.onmousemove = e => console.log("mousemove e.x: ", e.clientX, "; e.y: ", e.clientY);
-      canvas.onmouseup = e => console.log("mouseup e.x: ", e.clientX, "; e.y: ", e.clientY);
+    var reset_events = (canvas: any) => {
+      canvas.onmousedown = () => {};
+      canvas.onmousemove = () => {};
+      canvas.onmouseup = () => {};
+    }
+
+    var   setup_events = (canvas: any, drag: boolean) => {
+      canvas.onmousedown = (e: any) => {
+        console.log("mousedown e.x: ", e.clientX, "; e.y: ", e.clientY);
+        reset_events(canvas);
+        setup_events(canvas, true);
+      };
+      canvas.onmousemove = (e: any) => {
+        if (drag) {
+          console.log("mousemove e.x: ", e.clientX, "; e.y: ", e.clientY);
+        }
+      };
+      canvas.onmouseup = (e: any) => {
+        console.log("mouseup e.x: ", e.clientX, "; e.y: ", e.clientY)
+        reset_events(canvas);
+        setup_events(canvas, false);
+      };
     }
   
     ///////////////////////// ANIMATE ///////////////////////////
@@ -40,15 +58,15 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
   
       for (let i = 0; i < props.objs.length; i++) {
         ctx.beginPath();
-        ctx.arc(props.objs[i].x, props.objs[i].y, props.objs[i].radius, 0, 2*Math.PI);
+        ctx.arc(props.objs[i].x, props.objs[i].y, props.objs[i].radius, 0, 2 * Math.PI);
         ctx.stroke();
       }
-  
-      //requestAnimationFrame(() => animate(ctx))
+
+      requestAnimationFrame(() => animate(ctx))
     }
 
     ////////////////////////////////////////////////////
-  
+
     useEffect(() => {
       var     canvas = document.getElementById("canvas");
       var     terrain = document.getElementById("terrain");
@@ -58,7 +76,7 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       h = canvas.height = terrain?.offsetHeight;
       ctx.lineWidth = 1;
       
-      setup_events(canvas);
+      setup_events(canvas, false);
       animate(ctx);
   
     }, [])
