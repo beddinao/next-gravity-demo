@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, useEffect } from 'react';
+import {useState, useEffect, useRef } from 'react';
 import Panel from './panel';
 import Terrain from './terrain'
 
@@ -20,6 +20,7 @@ interface Item {
 export default function Home() {
   
   const [objects, setObjects] = useState<Object[]>([]);
+  var name = useRef("obj_0");
 
   useEffect(() => {
     fetchObjects();
@@ -86,8 +87,13 @@ export default function Home() {
         </ul>
       </div>
       <div>
-        <Terrain  objs={objects}
-          create={addObject}
+        <Terrain
+          objs={objects}
+          create={(x: number, y: number) => {
+            addObject(name.current, 10, 0, x, y, 0, 0, 0, 0);
+            let cur_num = Number(name.current.replace(/^\D+/g, '')) + 1;
+            name.current = name.current.substring(0, name.current.length - 1) + (cur_num.toString());
+          }}
           read={fetchObjects}
           update={updateObject}
           remove={deleteObjects}
