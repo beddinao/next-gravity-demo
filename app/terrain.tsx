@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 export default function  Terrain(props: { objs: any, create: () => void, read: () => void,
   update: () => void, remove: () => void
 }) {
-    const [requestID, setRequestID] = useState<any>(null);
+    var internalObjs = useRef(),
+        requestId = useRef(),
+        margin_x = useRef(),
+        margin_y = useRef();
     var   ctx, w: number, h: number;
   
     var draw_background = (ctx: any) => {
@@ -23,30 +26,6 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
         ctx.stroke();
       }
     }
-
-    var reset_events = (canvas: any) => {
-      canvas.onmousedown = () => {};
-      canvas.onmousemove = () => {};
-      canvas.onmouseup = () => {};
-    }
-
-    var   setup_events = (canvas: any, drag: boolean) => {
-      canvas.onmousedown = (e: any) => {
-        console.log("mousedown e.x: ", e.clientX, "; e.y: ", e.clientY);
-        reset_events(canvas);
-        setup_events(canvas, true);
-      };
-      canvas.onmousemove = (e: any) => {
-        if (drag) {
-          console.log("mousemove e.x: ", e.clientX, "; e.y: ", e.clientY);
-        }
-      };
-      canvas.onmouseup = (e: any) => {
-        console.log("mouseup e.x: ", e.clientX, "; e.y: ", e.clientY)
-        reset_events(canvas);
-        setup_events(canvas, false);
-      };
-    }
   
     ///////////////////////// ANIMATE ///////////////////////////
 
@@ -56,13 +35,14 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       draw_background(ctx);
       ctx.strokeStyle = "#ffffff";
       
-      for (let i = 0; i < props.objs.length; i++) {
-        ctx.beginPath();
-        ctx.arc(props.objs[i].x, props.objs[i].y, props.objs[i].radius, 0, 2 * Math.PI);
-        ctx.stroke();
-      }
+      if (internalObjs.current)
+        for (let i = 0; i < internalObjs.current.length; i++) {
+          ctx.beginPath();
+          ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
+          ctx.stroke();
+        }
 
-      setRequestID(requestAnimationFrame(() => animate(ctx)))
+      requestId.current = requestAnimationFrame(() => animate(ctx));
     }
 
     ////////////////////////////////////////////////////
@@ -70,26 +50,31 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
     useEffect(() => {
       var     canvas = document.getElementById("canvas");
       var     terrain = document.getElementById("terrain");
+      var     rect = canvas.getBoundingClientRect();
   
       ctx = canvas.getContext("2d");
       w = canvas.width = terrain?.offsetWidth;
       h = canvas.height = terrain?.offsetHeight;
+      margin_x.current = rect.left;
+      margin_y.current = rect.top;
       ctx.lineWidth = 1;
       
-      setup_events(canvas, false);
       animate(ctx);
 
-
-      return    () => {
-        reset_events(canvas);
-        cancelAnimationFrame(requestID);
+      return () => {
+        cancelAnimationFrame(requestId.current);
       }
-  
+
+    }, []);
+
+    useEffect(() => {
+      internalObjs.current = props.objs;
     }, [props.objs])
-  
+
+    
     return (
       <div id="terrain">
-        <canvas id="canvas">something went wrong!</canvas>
+        <canvas id="canvas" onClick={e => props.create(e.clientX - maring_x.current, e.clientY - margin_y.current)} >something went wrong!</canvas>
       </div>
     )
   }
