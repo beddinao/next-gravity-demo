@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
+import internal from 'stream';
 
 export default function  Terrain(props: { objs: any, create: () => void, read: () => void,
   update: () => void, remove: () => void, setObjs: () => void
@@ -39,13 +40,19 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
           internalObjs.current[i].vy = internalObjs.current[i].vy + internalObjs.current[i].ay * dt;
     */
 
+    var   collision_detector = (n_1: number, n_2: number, space: number) => {
+      if (n_1 > n_2 - space && n_1 < n_2 + space)
+        return  true;
+      return false;
+    }
+
     var animate = (ctx: any) => {
       ctx.clearRect(0, 0, w, h);
       ctx.strokeStyle = "#343434";
       draw_background(ctx);
       ctx.strokeStyle = "#ffffff";
       
-      let dt = 0.008, g = 39.5, soft_c = 0.15;
+      let dt = 1, g = 39.5, soft_c = 0.15;
 
       if (internalObjs.current) {
         for (let i = 0; i < internalObjs.current.length; i++) {
@@ -65,22 +72,35 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
               ax += f * d_x;
               ay += f * d_y;
             }
-
-            internalObjs.current[i].ax = ax;
-            internalObjs.current[i].ay = ay;
           }
+          internalObjs.current[i].ax = ax;
+          internalObjs.current[i].ay = ay;
           // V
           internalObjs.current[i].vx += internalObjs.current[i].ax * dt;
-          internalObjs.current[i].vy += internalObjs.current[i].ax * dt;
+          internalObjs.current[i].vy += internalObjs.current[i].ay * dt;
           // CHECK
           if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
+              //internalObjs.current[i].x = (internalObjs.current[i].x + w) % w;
+              internalObjs.current[i].vx *= -1;
+          }
+
+          if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > h) {
+                //internalObjs.current[i].y = (internalObjs.current[i].y + h) % h;
+                internalObjs.current[i].vy *= -1;
+          }
+
+            
+
+
+          
+          /*if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
             internalObjs.current[i].vx *= -1;
             internalObjs.current[i].x = internalObjs.current[i].x < 0 ? w : 0;
           }
-          if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > w) {
+          if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > h) {
             internalObjs.current[i].vy *= -1;
-            internalObjs.current[i].y = internalObjs.current[i].y < 0 ? y : 0;
-          }
+            internalObjs.current[i].y = internalObjs.current[i].y < 0 ? h : 0;
+          }*/
           // DRAW
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
