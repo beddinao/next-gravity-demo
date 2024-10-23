@@ -20,15 +20,6 @@ interface Item {
 export default function Home() {
   
   const [objects, setObjects] = useState<Object[]>([]);
-  const [s_name, setS_name] = useState<string>('');
-  const [s_mass, setS_mass] = useState<number>(0);
-  const [s_radius, setS_radius] = useState<number>(0);
-  const [s_x, setS_x] = useState<number>(0);
-  const [s_y, setS_y] = useState<number>(0);
-  const [s_vx, setS_vx] = useState<number>(0);
-  const [s_vy, setS_vy] = useState<number>(0);
-  const [s_ax, setS_ax] = useState<number>(0);
-  const [s_ay, setS_ay] = useState<number>(0);
 
   useEffect(() => {
     fetchObjects();
@@ -80,8 +71,14 @@ export default function Home() {
 
   return (
     <main>
-      {/*<Homeee /><div>
-        <Panel objs={objects} setObjs={setObjects} />
+
+      <div>
+        <Panel objs={objects} 
+            create={addObject}
+            read={fetchObjects}
+            update={updateObject}
+            remove={deleteObjects}
+          />
         <ul>
           <li>to create new objects click inside the canvas and drag to setup velocity</li>
           <li>click and drag on the side panel to move it</li>
@@ -89,10 +86,14 @@ export default function Home() {
         </ul>
       </div>
       <div>
-        <Terrain  objs={objects} setObjs={setObjs} />
-      </div>*/}
+        <Terrain  objs={objects}
+          create={addObject}
+          read={fetchObjects}
+          update={updateObject}
+          remove={deleteObjects}
+        />
+      </div>
 
-      
     </main>
   );
 }

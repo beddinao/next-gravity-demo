@@ -1,7 +1,9 @@
 
 import { useEffect, useState } from 'react';
 
-export default function  Terrain(props: { objs: any; }) {
+export default function  Terrain(props: { objs: any; create: Function; read: Function;
+  update: Function; delete: Function;
+}) {
   
     var   ctx, w: number, h: number;
   
