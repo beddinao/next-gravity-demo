@@ -138,6 +138,23 @@ main > div:nth-child(1) > ul {
 #panel > div:nth-child(2) {
   height: 10%;
 }
+
+#drop_down {
+  height: 90%;
+  width: 90%;
+}
+
+#drop_down_content{
+  width: 100%;
+  height:auto;
+}
+
+#drop_down_content > p {
+  height: 2em;
+  width: 100%;
+  border: 1px solid blue;
+}
+
 #panel > div:nth-child(3) {
   height: 60%;
 }

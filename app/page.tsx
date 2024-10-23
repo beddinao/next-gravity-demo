@@ -1,13 +1,30 @@
-import Image from "next/image";
+'use client'
 
-function Panel (){
+import Image from "next/image";
+import {useState, useEffect, AwaitedReactNode, JSXElementConstructor, ReactElement, ReactNode, ReactPortal} from 'react';
+
+function Panel (props: { objs: any; }) {
+  const [selected_obj, setSlected_obj] = useState([]);
+  const [local_objs, setLocal_objs] = useState(props.objs);
+
   return (
     <div id="panel">
       <div>
         <p>INSPECT - EDIT - DELETE</p>
       </div>
       <div>
-        
+        <div id="drop_down" >obj_1</div>
+        {
+          local_objs.length > 0 ?
+            <div id="drop_down_content">
+              {
+                local_objs.map((item: { name: string  }) => (
+                  <p>{item.name}</p>
+                ))
+              }
+            </div>
+          : []
+        }
       </div>
       <div>
         <ul></ul>
@@ -26,10 +43,17 @@ function  Terrain() {
 }
 
 export default function Home() {
+  var initial_objs = [
+    {
+      name: "obj_1"
+    }
+  ]
+
+
   return (
     <main>
       <div>
-        <Panel />
+        <Panel objs={initial_objs} />
         <ul>
           <li>to create new objects click inside the canvas and drag to setup velocity</li>
           <li>click and drag on the side panel to move it</li>
