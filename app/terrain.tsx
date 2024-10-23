@@ -1,15 +1,16 @@
-
 import { useEffect, useRef, useState } from 'react';
-import internal from 'stream';
 
 export default function  Terrain(props: { objs: any, create: () => void, read: () => void,
   update: () => void, remove: () => void, setObjs: () => void
 }) {
+
     var internalObjs = useRef(),
         requestId = useRef(),
         margin_x = useRef(),
         margin_y = useRef();
-    var   ctx, w: number, h: number;
+
+    var   ctx, w: number, h: number,
+          dt = 0.7, g = 39.5, soft_c = 0.15;
   
     var draw_background = (ctx: any) => {
   
@@ -26,6 +27,7 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
         ctx.lineTo(w, i);
         ctx.stroke();
       }
+
     }
   
     ///////////////////////// ANIMATE ///////////////////////////
@@ -40,37 +42,31 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
           internalObjs.current[i].vy = internalObjs.current[i].vy + internalObjs.current[i].ay * dt;
     */
 
-    var   collision_detector = (n_1: number, n_2: number, space: number) => {
-      if (n_1 > n_2 - space && n_1 < n_2 + space)
-        return  true;
-      return false;
-    }
-
     var animate = (ctx: any) => {
       ctx.clearRect(0, 0, w, h);
       ctx.strokeStyle = "#343434";
       draw_background(ctx);
       ctx.strokeStyle = "#ffffff";
-      
-      let dt = 1, g = 39.5, soft_c = 0.15;
 
       if (internalObjs.current) {
         for (let i = 0; i < internalObjs.current.length; i++) {
-          //  P
+          // P
           internalObjs.current[i].x += internalObjs.current[i].vx * dt;
           internalObjs.current[i].y += internalObjs.current[i].vy * dt;
           // A
           let   ax = 0, ay = 0;
           for (let j = 0; j < internalObjs.current.length; j++) {
             if (i != j) {
+
               let d_x = internalObjs.current[j].x - internalObjs.current[i].x,
                   d_y = internalObjs.current[j].y - internalObjs.current[i].y;
-              
+
               let dist_sq = d_x * d_x + d_y * d_y;
 
               let f = (g * internalObjs.current[j].mass) / (dist_sq * Math.sqrt( dist_sq + soft_c ));
               ax += f * d_x;
               ay += f * d_y;
+
             }
           }
           internalObjs.current[i].ax = ax;
@@ -78,29 +74,13 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
           // V
           internalObjs.current[i].vx += internalObjs.current[i].ax * dt;
           internalObjs.current[i].vy += internalObjs.current[i].ay * dt;
-          // CHECK
+          // WALL CHECK
           if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
-              //internalObjs.current[i].x = (internalObjs.current[i].x + w) % w;
               internalObjs.current[i].vx *= -1;
           }
-
           if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > h) {
-                //internalObjs.current[i].y = (internalObjs.current[i].y + h) % h;
                 internalObjs.current[i].vy *= -1;
           }
-
-            
-
-
-          
-          /*if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
-            internalObjs.current[i].vx *= -1;
-            internalObjs.current[i].x = internalObjs.current[i].x < 0 ? w : 0;
-          }
-          if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > h) {
-            internalObjs.current[i].vy *= -1;
-            internalObjs.current[i].y = internalObjs.current[i].y < 0 ? h : 0;
-          }*/
           // DRAW
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);

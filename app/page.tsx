@@ -93,7 +93,7 @@ export default function Home() {
         <Terrain
           objs={objects}
           create={(x: number, y: number) => {
-            addObject(rand_str(), 10, 0, x, y, 0, 0, 0, 0);
+            addObject(rand_str(), 20, 1, x, y, 0, 0, 0, 0);
           }}
           read={fetchObjects}
           update={updateObject}
