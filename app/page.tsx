@@ -20,7 +20,6 @@ interface Item {
 export default function Home() {
   
   const [objects, setObjects] = useState<Object[]>([]);
-  var name = useRef("obj_0");
 
   useEffect(() => {
     fetchObjects();
@@ -70,6 +69,10 @@ export default function Home() {
     fetchObjects();
   }
 
+  var rand_str = () => {
+		return	Math.random().toString(36).substr(2);
+	}
+
   return (
     <main>
 
@@ -90,9 +93,7 @@ export default function Home() {
         <Terrain
           objs={objects}
           create={(x: number, y: number) => {
-            addObject(name.current, 10, 0, x, y, 0, 0, 0, 0);
-            let cur_num = Number(name.current.replace(/^\D+/g, '')) + 1;
-            name.current = name.current.substring(0, name.current.length - 1) + (cur_num.toString());
+            addObject(rand_str(), 10, 0, x, y, 0, 0, 0, 0);
           }}
           read={fetchObjects}
           update={updateObject}

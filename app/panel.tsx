@@ -1,6 +1,5 @@
 import { Object } from '@prisma/client';
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect, useRef } from 'react';
 
 export default function Panel (props: { objs: any, create: () => void, read: () => void,
   update: () => void, remove: () => void
@@ -16,6 +15,7 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
   const [s_ax, setS_ax] = useState<number>(0);
   const [s_ay, setS_ay] = useState<number>(0);
   const [drop_down_droped_down, setDrop_down_droped_down] = useState(false);
+  var parentRect = useRef();
 
   var drop_d_dis = () => {
     setDrop_down_droped_down(drop_down_droped_down ? false : true);
@@ -41,6 +41,13 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
     }
   }, [props.objs]);
 
+  useEffect(() => {
+    var elem = document.getElementById("drop_down");
+    if (elem) {
+      parentRect.current = elem.getBoundingClientRect();
+    }
+  }, []);
+
   return (
     <div id="panel">
       <div>
@@ -50,12 +57,13 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
         <div id="drop_down" onClick={() => drop_d_dis()} ><p>{ s_name }</p></div>
         {
           drop_down_droped_down ?
-            <div id="drop_down_content" >
+            <div id="drop_down_content" style={{ top: (parentRect.current.top + parentRect.current.height).toString() + "px", left: parentRect.current.left.toString() + "px" }} >
               {
                 props.objs.map((object: Object) => (
                       object.id != s_id ?
                         <p key={object.id} onClick={() => {
                           setSelected(object);
+                          drop_d_dis();
                         }}>{object.name}</p>
                       : null
                 ))
@@ -75,7 +83,6 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
         <div><p>vy</p><input value={s_vy} onChange={e => setS_vy(Number(e.target.value))} /></div>
         <div><p>ax</p><input value={s_ax} onChange={e => setS_ax(Number(e.target.value))} /></div>
         <div><p>ay</p><input value={s_ay} onChange={e => setS_ay(Number(e.target.value))} /></div>
-
       </div>
       <div>
         <button onClick={() => {

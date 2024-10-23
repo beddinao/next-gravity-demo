@@ -14,6 +14,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition-duration: 0.1s;
 }
 
 body,
@@ -77,7 +78,6 @@ main > div:nth-child(1) > ul {
   width: 90%;
 }
 
-
 @media only screen and (max-width: 1500px) {
   main {
     flex-direction: column;
@@ -139,6 +139,7 @@ main > div:nth-child(1) > ul {
 #drop_down {
   height: 90%;
   width: 90%;
+  cursor: pointer;
 }
 
 #drop_down_content{
@@ -146,16 +147,25 @@ main > div:nth-child(1) > ul {
   height:auto;
   background-color: #000;
   position: absolute;
-  transform: translate(0, 150%);
-  border: 1px solid var(--black-two)
+  top: 0;
+  left: 0;
+  border: 1px solid var(--black-two);
+  max-height: 60%;
+  overflow: auto;
 }
 
 #drop_down_content > p {
+  cursor: pointer;
   height: 2em;
   width: 100%;
   display:flex;
   align-items: center;
   justify-content: center;
+}
+
+#drop_down_content > p:hover {
+  background: var(--white-one);
+  color: var(--black-zero)
 }
 
 #panel > div:nth-child(3) {
