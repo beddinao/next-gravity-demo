@@ -54,7 +54,8 @@ export async function DELETE(request: Request) {
 }
 
 
-/*To calculate the next x and y positions for each object in your gravity simulator, you can use the following equations:
+/*To calculate the next x and y positions for each object in your gravity simulator,
+you can use the following equations:
 
 ```
 x_next = x_current + vx_current * dt + 0.5 * ax_current * dt^2
