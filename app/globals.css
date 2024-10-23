@@ -42,7 +42,6 @@ p, li {
 main {
   height: 95%;
   width: 95%;
-  border: 1px solid #fff;
   flex-direction: row;
   justify-content: space-around;
 }
@@ -53,29 +52,26 @@ main > div {
 
 main > div:nth-child(1) {
   width: 30%;
-  border: 1px solid red;
   justify-content: space-around;
 }
 
 main > div:nth-child(2) {
   width: 60%;
-  border: 1px solid yellow;
 }
 
 #panel {
   width: 80%;
   height: 60%;
-  border: 1px solid rgb(27, 62, 219);
+  border: 1px solid var(--black-one)
 }
 
 main > div:nth-child(1) > ul {
-  border: 1px solid magenta;
   list-style: circle;
   padding: 10px;
+  border: 1px solid var(--black-one)
 }
 
 #terrain {
-  border: 1px solid blue;
   height: 80%;
   width: 90%;
 }
@@ -119,7 +115,7 @@ main > div:nth-child(1) > ul {
 #canvas{
   height: 100%;
   width: 100%;
-  border: 1px solid var(--white-one);
+  border: 1px solid var(--black-one);
 }
 
 #panel {
@@ -127,7 +123,6 @@ main > div:nth-child(1) > ul {
 }
 
 #panel > div {
-  border: 1px solid brown;
   width: 90%;
 }
 
@@ -137,6 +132,7 @@ main > div:nth-child(1) > ul {
 
 #panel > div:nth-child(2) {
   height: 10%;
+  border: 1px solid var(--black-one)
 }
 
 #drop_down {
@@ -145,18 +141,32 @@ main > div:nth-child(1) > ul {
 }
 
 #drop_down_content{
-  width: 100%;
+  width: 20%;
   height:auto;
+  background-color: #000;
+  position: absolute;
+  transform: translate(0, 150%);
+  border: 1px solid var(--black-two)
 }
 
 #drop_down_content > p {
   height: 2em;
   width: 100%;
-  border: 1px solid blue;
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #panel > div:nth-child(3) {
   height: 60%;
+  row-gap: 7px;
+}
+
+#panel > div:nth-child(3) > div {
+  width: 80%;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--black-two)
 }
 
 #panel > div:nth-child(4) {
