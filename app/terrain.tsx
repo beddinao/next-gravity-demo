@@ -45,6 +45,7 @@ export default function  Terrain(props: { objs: any; }) {
       w = canvas.width = terrain?.offsetWidth;
       h = canvas.height = terrain?.offsetHeight;
       ctx.lineWidth = 1;
+      
       animate(ctx);
   
     }, [])

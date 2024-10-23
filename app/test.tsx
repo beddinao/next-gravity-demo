@@ -35,7 +35,7 @@ function Homeee() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: editId, name }),
         });
-        fetchItems(); // Refetch items after update
+        fetchItems();
         setName('');
         setEditId(null);
       }
@@ -47,12 +47,12 @@ function Homeee() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),
       });
-      fetchItems(); // Refetch items after deletion
+      fetchItems();
     };
   
     return (
       <div>
-        <h1>CRUD App with Next.js, SQLite, and TypeScript</h1>
+        <h1>example</h1>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
