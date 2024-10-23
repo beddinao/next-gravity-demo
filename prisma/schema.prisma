@@ -14,7 +14,15 @@ datasource db {
 }
 
 
-model Item {
+model Object {
   id  Int   @id @default(autoincrement())
   name  String
+  radius  Int
+  mass  Int
+  x Int
+  y Int
+  vx  Int
+  vy  Int
+  ax  Int
+  ay  Int
 }
