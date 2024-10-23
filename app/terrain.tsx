@@ -40,6 +40,25 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
 
           internalObjs.current[i].vx = internalObjs.current[i].vx + internalObjs.current[i].ax * dt;
           internalObjs.current[i].vy = internalObjs.current[i].vy + internalObjs.current[i].ay * dt;
+
+          for (let i = 0; i < internalObjs.current.length; i++) {
+  // ... (other calculations)
+
+  for (let j = 0; j < internalObjs.current.length; j++) {
+    if (i !== j) {
+      // Calculate the distance between the centers of the objects
+      const dx = internalObjs.current[j].x - internalObjs.current[i].x;
+      const dy = internalObjs.current[j].y - internalObjs.current[i].y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Check for collision
+      if (distance <= internalObjs.current[i].radius + internalObjs.current[j].radius) {
+        // Handle collision
+        // ... (collision handling code)
+      }
+    }
+  }
+}
     */
 
     var animate = (ctx: any) => {
@@ -61,11 +80,16 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
               let d_x = internalObjs.current[j].x - internalObjs.current[i].x,
                   d_y = internalObjs.current[j].y - internalObjs.current[i].y;
 
-              let dist_sq = d_x * d_x + d_y * d_y;
+              let dist_sq = Math.sqrt(d_x * d_x + d_y * d_y);
 
               let f = (g * internalObjs.current[j].mass) / (dist_sq * Math.sqrt( dist_sq + soft_c ));
               ax += f * d_x;
               ay += f * d_y;
+
+              if (dist_sq <= internalObjs.current[i].radius + internalObjs.current[j].radius){
+                internalObjs.current[i].vx *= -1;
+                internalObjs.current[i].vy *= -1;
+              }
 
             }
           }
