@@ -50,8 +50,8 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       if (internalObjs.current) {
         for (let i = 0; i < internalObjs.current.length; i++) {
           //  P
-          internalObjs.current.x += internalObjs.current.vx * dt;
-          internalObjs.current.y += internalObjs.current.vy * dt;
+          internalObjs.current[i].x += internalObjs.current[i].vx * dt;
+          internalObjs.current[i].y += internalObjs.current[i].vy * dt;
           // A
           let   ax = 0, ay = 0;
           for (let j = 0; j < internalObjs.current.length; j++) {
@@ -70,8 +70,17 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
             internalObjs.current[i].ay = ay;
           }
           // V
-          internalObjs.current.vx += internalObjs.current.ax * dt;
-          internalObjs.current.vy += internalObjs.current.ax * dt;
+          internalObjs.current[i].vx += internalObjs.current[i].ax * dt;
+          internalObjs.current[i].vy += internalObjs.current[i].ax * dt;
+          // CHECK
+          if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
+            internalObjs.current[i].vx *= -1;
+            internalObjs.current[i].x = internalObjs.current[i].x < 0 ? w : 0;
+          }
+          if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > w) {
+            internalObjs.current[i].vy *= -1;
+            internalObjs.current[i].y = internalObjs.current[i].y < 0 ? y : 0;
+          }
           // DRAW
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
