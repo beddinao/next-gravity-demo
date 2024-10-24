@@ -13,7 +13,7 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
           dt = 0.07, g = 39.5, soft_c = 0.15;
   
     var draw_background = (ctx: any) => {
-      ctx.strokeStyle = "#343434";
+      ctx.strokeStyle = "#1f1f1f";
       for (let i = 0; i < w; i += 20) {
         ctx.beginPath();
         ctx.moveTo(i, 0);
@@ -87,6 +87,7 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
           ctx.stroke();
+          ctx.fill();
         }
         //props.setObjs(internalObjs.current);
       }
@@ -108,6 +109,8 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       margin_y.current = rect.top;
       ctx.lineWidth = 1;
       
+      ctx.globalAlpha = 0.3;
+      ctx.fillStyle = "#d6d6d6";
       animate(ctx);
 
       return () => {
