@@ -1,19 +1,23 @@
-import { useEffect, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { Object } from '@prisma/client';
 
-export default function  Terrain(props: { objs: any, create: () => void, read: () => void,
-  update: () => void, remove: () => void, setObjs: () => void
+export default function  Terrain(props: { objs: any[], create: (x: number, y: number) => void, read: () => void,
+  update: (id: number, name: string, radius: number, mass: number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
+  remove: (id: number) => Promise<void>, setObjs: Dispatch<SetStateAction<any>>
 }) {
 
-    var internalObjs = useRef(),
-        requestId = useRef(),
-        margin_x = useRef(),
-        margin_y = useRef();
+    var internalObjs = useRef<any>([]),
+        requestId = useRef<number | null>(null),
+        margin_x = useRef<number>(0),
+        margin_y = useRef<number>(0);
 
-    var   ctx, w: number, h: number,
+    var   ctx, w: number|undefined, h: number|undefined,
           dt = 0.07, g = 39.5, soft_c = 0.15;
   
     var draw_background = (ctx: any) => {
       ctx.strokeStyle = "#1f1f1f";
+      if (w == undefined || h == undefined)
+        return;
       for (let i = 0; i < w; i += 20) {
         ctx.beginPath();
         ctx.moveTo(i, 0);
@@ -29,6 +33,10 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
       }
 
     }
+
+    const refRequestAnimationFrame = (ctx:any) => {
+      requestId.current = requestAnimationFrame(() => animate(ctx));
+    };
   
     ///////////////////////// ANIMATE ///////////////////////////
 
@@ -66,23 +74,26 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
           internalObjs.current[i].vx += internalObjs.current[i].ax * dt;
           internalObjs.current[i].vy += internalObjs.current[i].ay * dt;
           // WALL CHECK
-          if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
-            if (!internalObjs.current[i].reversed_x) {
-                internalObjs.current[i].vx *= -1;
-                internalObjs.current[i].reversed_x = true;
-            }
-          } 
-          else
-            internalObjs.current[i].reversed_x = false;
-
-          if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > h) {
-            if (!internalObjs.current[i].reversed_y) {
-                internalObjs.current[i].vy *= -1;
-                internalObjs.current[i].reversed_y = true;
-            }
+          if (w) {
+            if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
+              if (!internalObjs.current[i].reversed_x) {
+                  internalObjs.current[i].vx *= -1;
+                  internalObjs.current[i].reversed_x = true;
+              }
+            } 
+            else
+              internalObjs.current[i].reversed_x = false;
           }
-          else
-            internalObjs.current[i].reversed_y = false;
+          if (h) {
+            if (internalObjs.current[i].y < 0 || internalObjs.current[i].y > h) {
+              if (!internalObjs.current[i].reversed_y) {
+                  internalObjs.current[i].vy *= -1;
+                  internalObjs.current[i].reversed_y = true;
+              }
+            }
+            else
+              internalObjs.current[i].reversed_y = false;
+          }
           // DRAW
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
@@ -91,30 +102,36 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
         }
         //props.setObjs(internalObjs.current);
       }
+      refRequestAnimationFrame(ctx);
 
-      requestId.current = requestAnimationFrame(() => animate(ctx));
     }
 
     ////////////////////////////////////////////////////
 
     useEffect(() => {
-      var     canvas = document.getElementById("canvas");
+      var     canvas = document.getElementById("canvas") as HTMLCanvasElement;
       var     terrain = document.getElementById("terrain");
-      var     rect = canvas.getBoundingClientRect();
-  
-      ctx = canvas.getContext("2d");
-      w = canvas.width = terrain?.offsetWidth;
-      h = canvas.height = terrain?.offsetHeight;
-      margin_x.current = rect.left;
-      margin_y.current = rect.top;
-      ctx.lineWidth = 1;
-      
-      ctx.globalAlpha = 0.3;
-      ctx.fillStyle = "#d6d6d6";
-      animate(ctx);
+
+      if (canvas) {
+        var     rect = canvas.getBoundingClientRect();
+    
+        ctx = canvas.getContext("2d");
+        if (ctx) {
+          w = canvas.width = terrain?.offsetWidth !== undefined ? terrain?.offsetWidth : 0;
+          h = canvas.height = terrain?.offsetHeight !== undefined ? terrain?.offsetHeight : 0;
+          margin_x.current = rect.left;
+          margin_y.current = rect.top;
+          ctx.lineWidth = 1;
+          
+          ctx.globalAlpha = 0.3;
+          ctx.fillStyle = "#d6d6d6";
+          animate(ctx);
+        }
+      }
 
       return () => {
-        cancelAnimationFrame(requestId.current);
+        if (requestId.current !== null)
+          cancelAnimationFrame(requestId.current);
       }
 
     }, []);
@@ -126,7 +143,9 @@ export default function  Terrain(props: { objs: any, create: () => void, read: (
     
     return (
       <div id="terrain">
-        <canvas id="canvas" onClick={e => props.create(e.clientX - margin_x.current, e.clientY - margin_y.current)} >something went wrong try <a onClick={() => window.location.reload()}>refreshing</a>!</canvas>
+        <canvas id="canvas" onClick={e => 
+          props.create(e.clientX - (margin_x.current ? margin_x.current : 0), e.clientY - (margin_y.current ? margin_y.current: 0))
+          } >something went wrong try <a onClick={() => window.location.reload()}>refreshing</a>!</canvas>
       </div>
     )
   }
