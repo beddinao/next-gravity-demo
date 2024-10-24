@@ -30,7 +30,7 @@ export default function Home() {
     const res = await fetch('/api/objects');
     const data: Object[] = await res.json();
     setObjects(data);
-  };
+  };  
 
   var addObject = async (name: string,
     radius: number, mass: number,
