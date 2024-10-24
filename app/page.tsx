@@ -29,7 +29,9 @@ export default function Home() {
   var fetchObjects = async () => {
     const res = await fetch('/api/objects');
     const data: Object[] = await res.json();
-    setObjects(data);
+    if (!Object.hasOwn(data, "error"))
+	    setObjects(data);
+else	console.log(data.error);
   };  
 
   var addObject = async (name: string,
@@ -44,7 +46,8 @@ export default function Home() {
       body: JSON.stringify({ name, radius, mass, x, y, vx, vy, ax, ay })
     })
     const newObject: Object = await res.json();
-    setObjects([...objects, newObject]);
+    if (objects !== undefined && !Object.hasOwn(newObject, "error"))
+	setObjects([...objects, newObject]);
   }
 
   var updateObject = async (id: number, name: string,
