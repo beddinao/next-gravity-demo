@@ -3,6 +3,7 @@
 import {useState, useEffect, useRef } from 'react';
 import Panel from './panel';
 import Terrain from './terrain'
+import { Varta } from 'next/font/google';
 
 interface Item {
   id: number;
@@ -73,6 +74,10 @@ export default function Home() {
 		return	Math.random().toString(36).substr(2);
 	}
 
+  var rand_num = (min:number, max:number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   return (
     <main>
 
@@ -93,7 +98,7 @@ export default function Home() {
         <Terrain
           objs={objects}
           create={(x: number, y: number) => {
-            addObject(rand_str(), Math.floor((Math.random() % (100 - 20)) + 20), Math.floor((Math.random() % (20 - 3)) + 3), x, y, 0, 0, 0, 0);
+            addObject(rand_str(), rand_num(20, 100), rand_num(3, 30), x, y, 0, 0, 0, 0);
           }}
           read={fetchObjects}
           update={updateObject}
