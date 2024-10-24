@@ -1,8 +1,10 @@
 import { Object } from '@prisma/client';
 import { useState, useEffect, useRef } from 'react';
 
-export default function Panel (props: { objs: any, create: () => void, read: () => void,
-  update: () => void, remove: () => void
+export default function Panel (props: { objs: any, create: (name: string, radius: number, mass: number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
+  read: () => void,
+  update: (id: number, name: string, radius: number, mass: number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
+  remove: (id: number) => Promise<void>
 }) {
   const [s_id, setS_id] = useState<number>(0);
   const [s_name, setS_name] = useState<string>('');
@@ -15,7 +17,7 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
   const [s_ax, setS_ax] = useState<number>(0);
   const [s_ay, setS_ay] = useState<number>(0);
   const [drop_down_droped_down, setDrop_down_droped_down] = useState(false);
-  var parentRect = useRef();
+  var parentRect = useRef<DOMRect>();
 
   var drop_d_dis = () => {
     setDrop_down_droped_down(drop_down_droped_down ? false : true);
@@ -60,7 +62,7 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
         }} ><p>{ s_name.length ? s_name : "empty" }</p></div>
         {
           drop_down_droped_down ?
-            <div id="drop_down_content" style={{ top: (parentRect.current.top + parentRect.current.height).toString() + "px", left: parentRect.current.left.toString() + "px" }} >
+            <div id="drop_down_content" style={{ top: parentRect.current ? (parentRect.current.top + parentRect.current.height).toString() + "px" : 0, left: parentRect.current ? parentRect.current.left.toString() + "px" : 0 }} >
               {
                 props.objs.map((object: Object) => (
                       object.id != s_id ?
@@ -89,14 +91,14 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
       </div>
       <div>
         <button onClick={() => {
-          let target = props.objs.find((({id}) => id == s_id));
+          let target = props.objs.find((obj: Object) => (obj as Object).id == s_id);
           if (target != undefined) {
             props.update(s_id, s_name, s_radius, s_mass, s_x, s_y, s_vx, s_vy, s_ax, s_ay);
             props.read();
           }
         }} >SAVE</button>
         <button onClick={() => {
-          let target = props.objs.find((({id}) => id == s_id));
+          let target = props.objs.find((obj: Object) => (obj as Object).id == s_id);
           if (target != undefined) {
             props.remove(s_id);
             props.read();
