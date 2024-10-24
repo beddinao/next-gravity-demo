@@ -16,7 +16,7 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
           dt = 0.07, g = 39.5, soft_c = 0.15;
   
     var draw_background = (ctx: any) => {
-      ctx.strokeStyle = "#2b2b2b";
+      ctx.strokeStyle = "#a19f9f";
       if (w == undefined || h == undefined)
         return;
       for (let i = 0; i < w; i += 20) {
@@ -98,7 +98,9 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
           // DRAW
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
+	ctx.globalAlpha = 1;
           ctx.stroke();
+          ctx.globalAlpha = 0.3;
           ctx.fill();
         }
         //props.setObjs(internalObjs.current);
@@ -132,8 +134,7 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
           margin_y.current = rect.top;
           ctx.lineWidth = 1;
           
-          ctx.globalAlpha = 0.3;
-          ctx.fillStyle = "#d6d6d6";
+          ctx.fillStyle = "#7C7C7C";
           animate(ctx);
         }
       }
