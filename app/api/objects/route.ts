@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 		if (!name || name.length > 20 || !name.length || radius < 0 || radius > 400
 		   || mass < 0 || mass > 10000 || x > 10000 || y > 10000 || vx > 10000
 		   || ax > 10000 || ay > 10000) {
-			   return NextReponse.json({error: 'Invaild input'}, {status: 400});
+			   return NextResponse.json({error: 'Invaild input'}, {status: 400});
 		   }
 
 		const newObject = await prisma.object.create({

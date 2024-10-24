@@ -31,7 +31,6 @@ export default function Home() {
     const data: Object[] = await res.json();
     if (!Object.hasOwn(data, "error"))
 	    setObjects(data);
-else	console.log(data.error);
   };  
 
   var addObject = async (name: string,
