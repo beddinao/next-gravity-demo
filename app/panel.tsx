@@ -54,7 +54,10 @@ export default function Panel (props: { objs: any, create: () => void, read: () 
         <p>INSPECT - EDIT - DELETE</p>
       </div>
       <div>
-        <div id="drop_down" onClick={() => drop_d_dis()} ><p>{ s_name }</p></div>
+        <div id="drop_down" onClick={() => {
+          if (props.objs.length)
+            drop_d_dis();
+        }} ><p>{ s_name.length ? s_name : "empty" }</p></div>
         {
           drop_down_droped_down ?
             <div id="drop_down_content" style={{ top: (parentRect.current.top + parentRect.current.height).toString() + "px", left: parentRect.current.left.toString() + "px" }} >

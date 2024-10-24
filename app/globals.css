@@ -1,8 +1,8 @@
 :root {
   --black-zero: #000;
-  --black-one: #343434;
-  --black-two: #535353;
-  --white-one: #d9d9d9;
+  --black-one: #515151;
+  --black-two: #1e1e1e;
+  --white-one: #cbcbcb;
 }
 
 body {
@@ -34,11 +34,15 @@ main {
 }
 
 p, li {
-  font-size: 1em;
+  font-size: 0.95em;
   color: var(--white-one);
   font-family: monospace;
   text-transform: uppercase;
   line-height: 18px;
+}
+
+li {
+  text-transform: lowercase;
 }
 
 main {
@@ -69,8 +73,8 @@ main > div:nth-child(2) {
 
 main > div:nth-child(1) > ul {
   list-style: circle;
-  padding: 10px;
-  border: 1px solid var(--black-one)
+  padding: 20px;
+  
 }
 
 #terrain {
@@ -142,6 +146,10 @@ main > div:nth-child(1) > ul {
   cursor: pointer;
 }
 
+#drop_down:hover {
+  background-color: var(--black-two);
+}
+
 #drop_down_content{
   width: 20%;
   height:auto;
@@ -170,18 +178,48 @@ main > div:nth-child(1) > ul {
 
 #panel > div:nth-child(3) {
   height: 60%;
-  row-gap: 7px;
+  row-gap: 10px;
 }
 
 #panel > div:nth-child(3) > div {
   width: 80%;
   flex-direction: row;
   justify-content: space-between;
-  border-bottom: 1px solid var(--black-two)
+  border-bottom: 1px solid var(--black-one)
 }
 
 #panel > div:nth-child(4) {
   flex-direction: row;
   justify-content: space-around;
   height: 10%;
+}
+
+input {
+  background-color: var(--black-zero);
+  color: var(--white-one);
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-family: monospace;
+  text-transform: uppercase;
+  line-height: 18px;
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid var(--black-one);
+}
+
+button {
+  width: 10em;
+  height: 3em;
+  border: 1px solid var(--black-one);
+  background-color: var(--black-zero);
+  cursor: pointer;
+  color: var(--white-one)
+}
+
+button:hover{
+  background-color: var(--black-two);
+  
 }

@@ -3,7 +3,7 @@
 import {useState, useEffect, useRef } from 'react';
 import Panel from './panel';
 import Terrain from './terrain'
-import { Varta } from 'next/font/google';
+import '@fontsource/open-sans'
 
 interface Item {
   id: number;
@@ -89,9 +89,10 @@ export default function Home() {
             remove={deleteObjects}
           />
         <ul>
-          <li>to create new objects click inside the canvas and drag to setup velocity</li>
-          <li>click and drag on the side panel to move it</li>
+          <li>to create new objects click on the canvas</li>
+          <li>use the side panel to edit an object properties (make sure to click save) or remove them</li>
           <li>objects themselves and their initial settings are stored in the database and updated upon editing, creation and deleting (does not get updated per frame).</li>
+          <li>used Next.js, TypeScript, SQLite, and Prisma</li>
         </ul>
       </div>
       <div>
