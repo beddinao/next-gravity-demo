@@ -50,6 +50,14 @@ export default function Panel (props: { objs: any, create: (name: string, radius
     }
   }, []);
 
+  var validate_input = (value:any, name:string) => {
+    let n = Number(value);
+    if (n > 0 && n < 100)
+        return  true;
+    console.log(name, " must be 0> & <100");
+    return  false;
+  }
+
   return (
     <div id="panel">
       <div>
@@ -78,16 +86,22 @@ export default function Panel (props: { objs: any, create: (name: string, radius
         }
       </div>
       <div>
-        <div><p>id</p><input value={s_id} onChange={e => setS_id(Number(e.target.value))} /></div>
-        <div><p>name</p><input value={s_name} onChange={e => setS_name(e.target.value)} /></div>
-        <div><p>solar_mass</p><input value={s_mass} onChange={e => setS_mass(Number(e.target.value))} /></div>
-        <div><p>radius</p><input value={s_radius} onChange={e => setS_radius(Number(e.target.value))} /></div>
-        <div><p>x</p><input value={s_x} onChange={e => setS_x(Number(e.target.value))} /></div>
-        <div><p>y</p><input value={s_y} onChange={e => setS_y(Number(e.target.value))} /></div>
-        <div><p>vx</p><input value={s_vx} onChange={e => setS_vx(Number(e.target.value))} /></div>
-        <div><p>vy</p><input value={s_vy} onChange={e => setS_vy(Number(e.target.value))} /></div>
-        <div><p>ax</p><input value={s_ax} onChange={e => setS_ax(Number(e.target.value))} /></div>
-        <div><p>ay</p><input value={s_ay} onChange={e => setS_ay(Number(e.target.value))} /></div>
+        <div><p>name</p><input value={s_name} onChange={e => {
+          if (e.target.value.length > 0 && e.target.value.length < 20)
+            setS_name(e.target.value)
+          else console.log("name length must be 0> & <20");
+        }} /></div>
+        <div><p>solar_mass</p><input value={s_mass} onChange={e => {
+         if (validate_input(e.target.value, "mass"))
+              setS_mass(Number(e.target.value));
+        }} /></div>
+        <div><p>radius</p><input value={s_radius} onChange={e => validate_input(e.target.value, "radius") ? setS_radius(Number(e.target.value)) : []} /></div>
+        <div><p>x</p><input value={s_x} onChange={e => validate_input(e.target.value, "x") ? setS_x(Number(e.target.value)) : []} /></div>
+        <div><p>y</p><input value={s_y} onChange={e => validate_input(e.target.value, "y") ? setS_y(Number(e.target.value)) : []} /></div>
+        <div><p>vx</p><input value={s_vx} onChange={e => validate_input(e.target.value, "vx") ? setS_vx(Number(e.target.value)) : []} /></div>
+        <div><p>vy</p><input value={s_vy} onChange={e => validate_input(e.target.value, "vy") ? setS_vy(Number(e.target.value)): []} /></div>
+        <div><p>ax</p><input value={s_ax} onChange={e => validate_input(e.target.value, "ax") ? setS_ax(Number(e.target.value)) : []} /></div>
+        <div><p>ay</p><input value={s_ay} onChange={e => validate_input(e.target.value, "ay") ? setS_ay(Number(e.target.value)) : []} /></div>
       </div>
       <div>
         <button onClick={() => {
@@ -99,8 +113,9 @@ export default function Panel (props: { objs: any, create: (name: string, radius
         }} >SAVE</button>
         <button onClick={() => {
           let target = props.objs.find((obj: Object) => (obj as Object).id == s_id);
+          console.log("called delete");
           if (target != undefined) {
-            props.remove(s_id);
+            props.remove(target.id);
             props.read();
           }
           }} >DELETE</button>
