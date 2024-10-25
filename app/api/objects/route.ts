@@ -8,7 +8,7 @@ export async function GET() {
 		const objects = await prisma.object.findMany();
 		return NextResponse.json(objects);
 	} catch (error) {
-		console.log("GET: ", error);
+		console.warn("GET: ", error);
 		return NextResponse.json({ error: 'Failed to fetch objects' }, { status: 500 });
 	}
 }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 		});
 		return NextResponse.json(newObject, { status: 201 });
 	} catch (error) {
-		console.log("POST:", error);
+		console.warn("POST:", error);
 		return NextResponse.json({ error: 'Failed to create object' }, { status: 500 });
 	}
 }
@@ -54,13 +54,20 @@ export async function PUT(request: Request) {
 		   || ax > 10000 || ay > 10000) {
 			return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
 		}
+
+		const checked_obj = await prisma.object.findUnique({
+			where: { id: parsedId },
+		});
+
+		if (!checked_obj) return NextResponse.json({ error: 'Object not found' }, { status: 404 });
+
 		const updatedObject = await prisma.object.update({
 			where: { id: parsedId },
 			data: { name, radius, mass, x, y, vx, vy, ax, ay },
 		});
 		return NextResponse.json(updatedObject, { status: 200 });
 	} catch (error) {
-		console.log("PUT:", error);
+		console.warn("PUT:", error);
 		return NextResponse.json({ error: 'Failed to update object' }, { status: 500 });
 	}
 }
@@ -78,13 +85,20 @@ export async function DELETE(request: Request) {
 		if (isNaN(parsedId) || id < 0 || id > 10000) {
 			return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 		}
+
+		const checked_obj = await prisma.object.findUnique({
+			where: { id: parsedId },
+		});
+
+		if (!checked_obj) return NextResponse.json({ error: 'Object not found'}, { status: 404 });
+
 		await prisma.object.delete({
 			where: { id: parsedId },
 		});
 
 		return NextResponse.json(null, { status: 200 });
 	} catch (error) {	
-		console.log("DELETE: ", error);
+		console.warn("DELETE: ", error);
 		return NextResponse.json({ error: 'Failed to delete object' }, { status: 500 });
 	}
 }
