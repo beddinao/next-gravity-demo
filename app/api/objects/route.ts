@@ -15,6 +15,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
 	try {
+		var contentType = request.headers.get('content-type');
+		if (!contentType || contentType === undefined)
+			contentType = request.headers.get('Content-Type');
+		if (!contentType || contentType === undefined || contentType !== 'application/json')
+			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
+
 		const { name, radius, mass, x, y, vx, vy, ax, ay } = await request.json();
 		
 		if (!name || name.length > 20 || !name.length || radius < 0 || radius > 400
@@ -35,6 +41,11 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
 	try {
+		var	contentType = request.headers.get('content-type');
+		if (!contentType || contentType === undefined) contentType = request.headers.get('Content-Type');
+		if (!contentType || contentType === undefined || contentType !== 'application/json')
+			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
+
 		const { id, name, radius, mass, x, y, vx, vy, ax, ay } = await request.json();
 		const parsedId = parseInt(id, 10);
 
@@ -56,6 +67,11 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
 	try {
+		var	contentType = request.headers.get('content-type');
+		if (!contentType || contentType === undefined) contentType = request.headers.get('Content-Type');
+		if (!contentType || contentType === undefined || contentType !== 'application/json')
+			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
+
 		const { id } = await request.json();
 		const parsedId = parseInt(id, 10);
 

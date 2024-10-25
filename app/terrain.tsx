@@ -96,11 +96,14 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
               internalObjs.current[i].reversed_y = false;
           }
           // DRAW
+	ctx.globalAlpha = 1;
+	ctx.fillText(internalObjs.current[i].name, internalObjs.current[i].x, internalObjs.current[i].y - internalObjs.current[i].radius-10);
+
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
-	ctx.globalAlpha = 1;
           ctx.stroke();
           ctx.globalAlpha = 0.3;
+	ctx.fillStyle = "#7c7c7c";
           ctx.fill();
         }
         //props.setObjs(internalObjs.current);
@@ -134,6 +137,9 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
           margin_y.current = rect.top;
           ctx.lineWidth = 1;
           
+	ctx.font = "12px monospace all-small-caps";
+	ctx.textAlign = "center";
+	(ctx as CanvasRenderingContext2D & { fontVariantCaps: string }).fontVariantCaps = "all-small-caps";
           ctx.fillStyle = "#7C7C7C";
           animate(ctx);
         }
