@@ -12,6 +12,9 @@ model Object {
   name   String
   radius Int
   mass   Int
+  red	Int
+  green	Int
+  blue	Int
   x      Int
   y      Int
   vx     Int

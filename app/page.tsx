@@ -10,6 +10,9 @@ interface Item {
   name: string;
   radius: number;
   mass: number;
+  red: number;
+  green: number;
+  blue: number;
   x: number;
   y: number;
   vx: number;
@@ -35,6 +38,7 @@ export default function Home() {
 
   var addObject = async (name: string,
     radius: number, mass: number,
+    red: number, green: number, blue: number,
     x: number, y: number,
     vx: number, vy: number,
     ax : number, ay: number
@@ -42,7 +46,7 @@ export default function Home() {
     const res = await fetch('/api/objects', {
       method: 'POST',
       headers: { 'Content-Type':  'application/json'},
-      body: JSON.stringify({ name, radius, mass, x, y, vx, vy, ax, ay })
+      body: JSON.stringify({ name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay })
     })
     const newObject: Object = await res.json();
     if (objects !== undefined && !Object.hasOwn(newObject, "error"))
@@ -51,6 +55,7 @@ export default function Home() {
 
   var updateObject = async (id: number, name: string,
     radius: number, mass: number,
+    red: number, green: number, blue: number,
     x: number, y: number,
     vx: number, vy: number,
     ax: number, ay: number
@@ -58,7 +63,7 @@ export default function Home() {
     await fetch ('/api/objects', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, name, radius, mass, x, y, vx, vy, ax, ay })
+      body: JSON.stringify({ id, name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay })
     })
     fetchObjects();
   }
@@ -101,12 +106,8 @@ export default function Home() {
         <Terrain
           objs={objects}
           create={(x: number, y: number) => {
-            addObject(rand_str(), rand_num(20, 100), rand_num(3, 30), x, y, 0, 0, 0, 0);
+            addObject(rand_str(), rand_num(20, 100), rand_num(3, 30), rand_num(100, 255), rand_num(100, 255), rand_num(100, 255), x, y, 0, 0, 0, 0);
           }}
-          read={fetchObjects}
-          update={updateObject}
-          remove={deleteObjects}
-          setObjs={setObjects}
         />
       </div>
 

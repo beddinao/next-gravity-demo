@@ -21,16 +21,17 @@ export async function POST(request: Request) {
 		if (!contentType || contentType === undefined || contentType !== 'application/json')
 			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
 
-		const { name, radius, mass, x, y, vx, vy, ax, ay } = await request.json();
+		const { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay } = await request.json();
 		
 		if (!name || name.length > 20 || !name.length || radius < 0 || radius > 400
+		   || red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255
 		   || mass < 0 || mass > 10000 || x > 10000 || y > 10000 || vx > 10000
 		   || ax > 10000 || ay > 10000) {
 			   return NextResponse.json({error: 'Invaild input'}, {status: 400});
 		   }
 
 		const newObject = await prisma.object.create({
-			data: { name, radius, mass, x, y, vx, vy, ax, ay },
+			data: { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay },
 		});
 		return NextResponse.json(newObject, { status: 201 });
 	} catch (error) {
@@ -46,10 +47,11 @@ export async function PUT(request: Request) {
 		if (!contentType || contentType === undefined || contentType !== 'application/json')
 			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
 
-		const { id, name, radius, mass, x, y, vx, vy, ax, ay } = await request.json();
+		const { id, name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay } = await request.json();
 		const parsedId = parseInt(id, 10);
 
 		if (isNaN(parsedId) || id < 0 || id > 10000 || !name || name.length > 20 || !name.length || radius < 0 || radius > 400
+		   || red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255
 		   || mass < 0 || mass > 10000 || x < 0 || x > 10000 || y < 0 || y > 10000 || vx > 10000
 		   || ax > 10000 || ay > 10000) {
 			return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
@@ -63,7 +65,7 @@ export async function PUT(request: Request) {
 
 		const updatedObject = await prisma.object.update({
 			where: { id: parsedId },
-			data: { name, radius, mass, x, y, vx, vy, ax, ay },
+			data: { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay },
 		});
 		return NextResponse.json(updatedObject, { status: 200 });
 	} catch (error) {
