@@ -1,10 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Object } from '@prisma/client';
 
-export default function  Terrain(props: { objs: any[], create: (x: number, y: number) => void, read: () => void,
-  update: (id: number, name: string, radius: number, mass: number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
-  remove: (id: number) => Promise<void>, setObjs: Dispatch<SetStateAction<any>>
-}) {
+export default function  Terrain(props: { objs: any[], create: (x: number, y: number) => void }) {
     const [canvasRefresh, setCanvasRefresh] = useState<boolean>(false);
     var internalObjs = useRef<any>([]),
         requestId = useRef<number | null>(null),
@@ -44,7 +41,8 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
     var animate = (ctx: any) => {
       ctx.clearRect(0, 0, w, h);
       draw_background(ctx);
-      ctx.strokeStyle = "#ffffff";
+      //ctx.strokeStyle = "#ffffff";
+      //ctx.strokeStyle = "#4287f5";
 
       if (internalObjs.current) {
         for (let i = 0; i < internalObjs.current.length; i++) {
@@ -95,15 +93,18 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
             else
               internalObjs.current[i].reversed_y = false;
           }
-          // DRAW
+	// COLORS SETUP
+	ctx.strokeStyle = `rgb(${internalObjs.current[i].red}, ${internalObjs.current[i].green}, ${internalObjs.current[i].blue})`;
+	ctx.fillStyle = `rgb(${internalObjs.current[i].red}, ${internalObjs.current[i].green}, ${internalObjs.current[i].blue})`;
+          // DRAW TEXT
 	ctx.globalAlpha = 1;
 	ctx.fillText(internalObjs.current[i].name, internalObjs.current[i].x, internalObjs.current[i].y - internalObjs.current[i].radius-10);
-
+	// DRAW CIRCLE BORDERS
           ctx.beginPath();
           ctx.arc(internalObjs.current[i].x, internalObjs.current[i].y, internalObjs.current[i].radius, 0, 2 * Math.PI);
           ctx.stroke();
-          ctx.globalAlpha = 0.3;
-	ctx.fillStyle = "#7c7c7c";
+	// DRAW CIRCLE BG
+          ctx.globalAlpha = 0.2;
           ctx.fill();
         }
         //props.setObjs(internalObjs.current);

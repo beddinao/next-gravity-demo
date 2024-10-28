@@ -1,15 +1,18 @@
 import { Object } from '@prisma/client';
 import { useState, useEffect, useRef } from 'react';
 
-export default function Panel (props: { objs: any, create: (name: string, radius: number, mass: number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
+export default function Panel (props: { objs: any, create: (name: string, radius: number, mass: number, red:number, green:number, blue:number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
 		read: () => void,
-		update: (id: number, name: string, radius: number, mass: number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
+		update: (id: number, name: string, radius: number, mass: number, red:number, green: number, blue: number, x: number, y: number, vx: number, vy: number, ax: number, ay: number) => Promise<void>,
 		remove: (id: number) => Promise<void>
 		}) {
 	const [s_id, setS_id] = useState<number>(0);
 	const [s_name, setS_name] = useState<string>('');
 	const [s_mass, setS_mass] = useState<number>(0);
 	const [s_radius, setS_radius] = useState<number>(0);
+	const [s_red, setS_red] = useState<number>(0);
+	const [s_green, setS_green] = useState<number>(0);
+	const [s_blue, setS_blue] = useState<number>(0);
 	const [s_x, setS_x] = useState<number>(0);
 	const [s_y, setS_y] = useState<number>(0);
 	const [s_vx, setS_vx] = useState<number>(0);
@@ -18,6 +21,7 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 	const [s_ay, setS_ay] = useState<number>(0);
 	const [drop_down_droped_down, setDrop_down_droped_down] = useState(false);
 	var parentRect = useRef<DOMRect>();
+	var widthRefRect = useRef<DOMRect>();
 
 	var drop_d_dis = () => {
 		setDrop_down_droped_down(drop_down_droped_down ? false : true);
@@ -28,6 +32,9 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 		setS_name(object.name);
 		setS_mass(object.mass);
 		setS_radius(object.radius);
+		setS_red(object.red);
+		setS_green(object.green);
+		setS_blue(object.blue);
 		setS_x(object.x);
 		setS_y(object.y);
 		setS_vx(object.vx);
@@ -37,17 +44,21 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 	}
 
 	useEffect(() => {
-			if (props.objs.length) {
+		if (props.objs.length) {
 			setSelected(props.objs[0]);
-			}
-			}, [props.objs]);
+		}
+	}, [props.objs]);
 
 	useEffect(() => {
-			var elem = document.getElementById("drop_down");
-			if (elem) {
+		var elem = document.getElementById("drop_down");
+		if (elem) {
 			parentRect.current = elem.getBoundingClientRect();
-			}
-			}, []);
+		}
+		var div_static_width = document.getElementById("static_width_reference");
+		if (div_static_width) {
+			widthRefRect.current = div_static_width.getBoundingClientRect();
+		}
+	}, []);
 
 	var validate_input = (value:any, name:string, min:number, max:number) => {
 		let n = Number(value);
@@ -102,7 +113,14 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 				if (validate_input(e.target.value, "mass", 0, 10000))
 					setS_mass(Number(e.target.value));
 			}} /></div>
-			<div><p>radius</p><input value={s_radius} onChange={e => validate_input(e.target.value, "radius", 1, 400) ? setS_radius(Number(e.target.value)) : []} /></div>
+			<div><p>radius</p><input id="static_width_reference" value={s_radius} onChange={e => validate_input(e.target.value, "radius", 1, 400) ? setS_radius(Number(e.target.value)) : []} /></div>
+			<div><p>RGB color</p>
+				<div style={{ width: (widthRefRect.current ? widthRefRect.current.width : 0) + "px" }}>
+				<input value={s_red} onChange={e => validate_input(e.target.value, "red value", 0, 255) ? setS_red(Number(e.target.value)) : []} />,
+				<input value={s_green} onChange={e => validate_input(e.target.value, "green value", 0, 255) ? setS_green(Number(e.target.value)) : []} />,
+				<input value={s_blue} onChange={e => validate_input(e.target.value, "blue value", 0, 255) ? setS_blue(Number(e.target.value)) : []} />
+				</div>
+			</div>
 				<div><p>x</p><input value={s_x} onChange={e => validate_x_y(e.target.value) ? setS_x(Number(e.target.value)) : []} /></div>
 				<div><p>y</p><input value={s_y} onChange={e => validate_x_y(e.target.value) ? setS_y(Number(e.target.value)) : []} /></div>
 				<div><p>vx</p><input value={s_vx} onChange={e => validate_input(e.target.value, "vx", -10000, 10000) ? setS_vx(Number(e.target.value)) : []} /></div>
@@ -114,7 +132,7 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 				<button onClick={() => {
 					let target = props.objs.find((obj: Object) => (obj as Object).id == s_id);
 					if (target != undefined) {
-						props.update(s_id, s_name, s_radius, s_mass, s_x, s_y, s_vx, s_vy, s_ax, s_ay);
+						props.update(s_id, s_name, s_radius, s_mass, s_red, s_green, s_blue, s_x, s_y, s_vx, s_vy, s_ax, s_ay);
 						props.read();
 					}
 				}} >SAVE</button>

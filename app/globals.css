@@ -1,233 +1,241 @@
 :root {
-  --black-zero: #000;
-  --black-one: #515151;
-  --black-two: #1e1e1e;
-  --white-one: #cbcbcb;
-  --black-three: #0a0a0a;
-  --black-four: #2b2b2b;
+	--black-zero: #000;
+	--black-one: #515151;
+	--black-two: #1e1e1e;
+	--white-one: #cbcbcb;
+	--black-three: #0a0a0a;
+	--black-four: #2b2b2b;
 }
 
 body {
-  color: var(--white-one);
-  background: var(--black-zero)
+	color: var(--white-one);
+	background: var(--black-zero)
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  transition-duration: 0.1s;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	transition-duration: 0.1s;
 }
 
 body,
 html {
-  height: 100vh;
-  width: 100%;
+	height: 100vh;
+	width: 100%;
 }
 
 body,
 div,
 main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 p, li {
-  font-size: 0.95em;
-  color: var(--white-one);
-  font-family: monospace;
-  text-transform: uppercase;
-  line-height: 18px;
+	font-size: 0.95em;
+	color: var(--white-one);
+	font-family: monospace;
+	text-transform: uppercase;
+	line-height: 18px;
 }
 
 li {
-  text-transform: lowercase;
+	text-transform: lowercase;
 }
 
 main {
-  height: 95%;
-  width: 95%;
-  flex-direction: row;
-  justify-content: space-around;
+	height: 95%;
+	width: 95%;
+	flex-direction: row;
+	justify-content: space-around;
 }
 
 main > div {
-  height: 100%;
+	height: 100%;
 }
 
 main > div:nth-child(1) {
-  width: 30%;
-  justify-content: space-around;
+	width: 30%;
+	justify-content: space-around;
 }
 
 main > div:nth-child(2) {
-  width: 60%;
+	width: 60%;
 }
 
 #panel {
-  width: 80%;
-  height: 60%;
-  border: 1px solid var(--black-four);
-  background: var(--black-three);
-  border-radius: 5px;
+	width: 80%;
+	height: 60%;
+	border: 1px solid var(--black-four);
+	background: var(--black-three);
+	border-radius: 5px;
 }
 
 main > div:nth-child(1) > ul {
-  list-style: circle;
-  padding: 20px;
-  
+	list-style: circle;
+	padding: 20px;
+
 }
 
 #terrain {
-  height: 80%;
-  width: 90%;
+	height: 80%;
+	width: 90%;
 }
 
 @media only screen and (max-width: 1500px) {
-  main {
-    flex-direction: column;
-  }
-  main > div:nth-child(1) {
-    width: 50%;
-    height: 50%;
-  }
-  main > div:nth-child(2) {
-    width: 80%;
-    height: 50%;
-  }
-  #terrain {
-    height: 99%;
-    width: 99%;
-  }
+	main {
+		flex-direction: column;
+	}
+	main > div:nth-child(1) {
+		width: 50%;
+		height: 50%;
+	}
+	main > div:nth-child(2) {
+		width: 80%;
+		height: 50%;
+	}
+	#terrain {
+		height: 99%;
+		width: 99%;
+	}
 }
 
 @media only screen and (max-width: 1400px) {
-  main > div:nth-child(1) > ul {
-    display: none;
-  }
-  #panel {
-    height: 99%;
-    width: 99%;
-  }
-  #terrain {
-    height: 99%;
-    width: 99%;
-  }
-  main > div:nth-child(1), main > div:nth-child(2) {
-    width: 100%;
-  }
+	main > div:nth-child(1) > ul {
+		display: none;
+	}
+	#panel {
+		height: 99%;
+		width: 99%;
+	}
+	#terrain {
+		height: 99%;
+		width: 99%;
+	}
+	main > div:nth-child(1), main > div:nth-child(2) {
+		width: 100%;
+	}
 }
 
 #canvas{
-  height: 100%;
-  width: 100%;
-  border: 1px solid var(--black-four);
-  background: var(--black-three);
-  border-radius: 5px;
+	height: 100%;
+	width: 100%;
+	border: 1px solid var(--black-four);
+	background: var(--black-three);
+	border-radius: 5px;
 }
 
 #panel {
-  justify-content: space-between;
+	justify-content: space-between;
 }
 
 #panel > div {
-  width: 90%;
+	width: 90%;
 }
 
 #panel > div:nth-child(1) {
-  height: 10%;
+	height: 10%;
 }
 
 #panel > div:nth-child(2) {
-  height: 10%;
-  border: 1px solid var(--black-one)
+	height: 10%;
+	border: 1px solid var(--black-one)
+}
+
+#panel > div:nth-child(3) > div:nth-child(4) > div {
+	flex-direction: row;
+}
+
+#panel > div:nth-child(3) > div:nth-child(4)  input {
+	width: 33.3%;
 }
 
 #drop_down {
-  height: 90%;
-  width: 90%;
-  cursor: pointer;
-  border-radius: 5px;
+	height: 90%;
+	width: 90%;
+	cursor: pointer;
+	border-radius: 5px;
 }
 
 #drop_down:hover {
-  background-color: var(--black-two);
+	background-color: var(--black-two);
 }
 
 #drop_down_content{
-  width: 20%;
-  height:auto;
-  background-color: #000;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: 1px solid var(--black-two);
-  max-height: 60%;
-  overflow: auto;
+	width: 20%;
+	height:auto;
+	background-color: #000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border: 1px solid var(--black-two);
+	max-height: 60%;
+	overflow: auto;
 }
 
 #drop_down_content > p {
-  cursor: pointer;
-  height: 2em;
-  width: 100%;
-  display:flex;
-  align-items: center;
-  justify-content: center;
+	cursor: pointer;
+	height: 2em;
+	width: 100%;
+	display:flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #drop_down_content > p:hover {
-  background: var(--white-one);
-  color: var(--black-zero)
+	background: var(--white-one);
+	color: var(--black-zero)
 }
 
 #panel > div:nth-child(3) {
-  height: 60%;
-  row-gap: 10px;
+	height: 60%;
+	row-gap: 10px;
 }
 
 #panel > div:nth-child(3) > div {
-  width: 80%;
-  flex-direction: row;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--black-one)
+	width: 80%;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom: 1px solid var(--black-one)
 }
 
 #panel > div:nth-child(4) {
-  flex-direction: row;
-  justify-content: space-around;
-  height: 10%;
+	flex-direction: row;
+	justify-content: space-around;
+	height: 10%;
 }
 
 input {
-  background-color: var(--black-zero);
-  color: var(--white-one);
-  outline: none;
-  border: none;
-  cursor: pointer;
-  font-family: monospace;
-  text-transform: uppercase;
-  line-height: 18px;
+	background-color: var(--black-zero);
+	color: var(--white-one);
+	outline: none;
+	border: none;
+	cursor: pointer;
+	font-family: monospace;
+	text-transform: uppercase;
+	line-height: 18px;
 }
 
 input:focus {
-  outline: none;
-  border: 1px solid var(--black-one);
+	outline: none;
+	border: 1px solid var(--black-one);
 }
 
 button {
-  width: 10em;
-  height: 3em;
-  border: 1px solid var(--black-one);
-  background-color: var(--black-zero);
-  cursor: pointer;
-  color: var(--white-one);
-  border-radius: 5px;
+	width: 10em;
+	height: 3em;
+	border: 1px solid var(--black-one);
+	background-color: var(--black-zero);
+	cursor: pointer;
+	color: var(--white-one);
+	border-radius: 5px;
 }
 
 button:hover{
-  background-color: var(--black-two);
-  
+	background-color: var(--black-two);
+
 }
