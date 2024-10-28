@@ -19,12 +19,15 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 	const [s_vy, setS_vy] = useState<number>(0);
 	const [s_ax, setS_ax] = useState<number>(0);
 	const [s_ay, setS_ay] = useState<number>(0);
-	const [drop_down_droped_down, setDrop_down_droped_down] = useState(false);
-	var parentRect = useRef<DOMRect>();
+	const [drop_down_droped_down, setDrop_down_droped_down] = useState<boolean>(false);
+	const [parentRect, setParentRect] = useState<DOMRect | null>(null);
 	var widthRefRect = useRef<DOMRect>();
 
 	var drop_d_dis = () => {
 		setDrop_down_droped_down(drop_down_droped_down ? false : true);
+		var elem = document.getElementById("drop_down");
+		if (elem) 
+			setParentRect(elem.getBoundingClientRect());
 	}
 
 	var   setSelected = (object: Object) => {
@@ -50,14 +53,9 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 	}, [props.objs]);
 
 	useEffect(() => {
-		var elem = document.getElementById("drop_down");
-		if (elem) {
-			parentRect.current = elem.getBoundingClientRect();
-		}
 		var div_static_width = document.getElementById("static_width_reference");
-		if (div_static_width) {
+		if (div_static_width) 
 			widthRefRect.current = div_static_width.getBoundingClientRect();
-		}
 	}, []);
 
 	var validate_input = (value:any, name:string, min:number, max:number) => {
@@ -88,7 +86,8 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 			}} ><p>{ s_name.length ? s_name : "empty" }</p></div>
 			{
 			drop_down_droped_down ?
-			<div id="drop_down_content" style={{ top: parentRect.current ? (parentRect.current.top + parentRect.current.height).toString() + "px" : 0, left: parentRect.current ? parentRect.current.left.toString() + "px" : 0 }} >
+			<div id="drop_down_content" style={{ top: parentRect ? (parentRect.top + parentRect.height).toString() + "px" : 0, left: parentRect.current ? parentRect.current.left.toString() + "px" : 0,
+							left: (parentRect ? parentRect.left : 0) + "px" }} >
 			{
 			props.objs.map((object: Object) => (
 						object.id != s_id ?
@@ -104,7 +103,7 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 			}
 			</div>
 				<div>
-				<div><p>name</p><input value={s_name} onChange={e => {
+				<div style={{ 'borderColor': `rgb(${s_red}, ${s_green}, ${s_blue})` }} ><p>name</p><input value={s_name} onChange={e => {
 					if (e.target.value.length > 0 && e.target.value.length < 20)
 						setS_name(e.target.value)
 					else console.log("name length must be 0> & <20");
