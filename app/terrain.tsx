@@ -138,7 +138,7 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
           margin_y.current = rect.top;
           ctx.lineWidth = 1;
           
-	ctx.font = "12px monospace all-small-caps";
+	ctx.font = "130px monospace all-small-caps";
 	ctx.textAlign = "center";
 	(ctx as CanvasRenderingContext2D & { fontVariantCaps: string }).fontVariantCaps = "all-small-caps";
           ctx.fillStyle = "#7C7C7C";

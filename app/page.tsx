@@ -106,7 +106,7 @@ export default function Home() {
         <Terrain
           objs={objects}
           create={(x: number, y: number) => {
-            addObject(rand_str(), rand_num(20, 100), rand_num(3, 30), rand_num(100, 255), rand_num(100, 255), rand_num(100, 255), x, y, 0, 0, 0, 0);
+            addObject(rand_str(), rand_num(20, 100), rand_num(3, 30), rand_num(10, 255), rand_num(10, 255), rand_num(10, 255), x, y, 0, 0, 0, 0);
           }}
         />
       </div>
