@@ -1,3 +1,5 @@
+<img src="./screenshots/banner_2.png" />
+
 # *`NEXT-GRAVIRY-DEMO`*
 
 ## about
@@ -15,3 +17,7 @@ Users can create objects by clicking on a canvas, edit their attributes via a si
 - Next.js
 - Prisma
 - SQLite
+
+## preview
+
+<img src="./screenshots/screen_shot_1.png" />  
