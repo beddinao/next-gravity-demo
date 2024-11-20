@@ -1,4 +1,4 @@
-# *`CRUD-GRAVIRY-DEMO`*
+# *`NEXT-GRAVIRY-DEMO`*
 
 ## about
 This full-stack web application demonstrates CRUD (Create, Read, Update, Delete) operations
