@@ -161,7 +161,7 @@ export default function Terrain(props: {
                 (internalObjs.current[j].y - internalObjs.current[i].y) /
                 dist_sq;
 
-              /*let totalMass =
+              let totalMass =
                 internalObjs.current[i].mass + internalObjs.current[j].mass;
               let moveRatio1 = internalObjs.current[j].mass / totalMass;
               internalObjs.current[i].x -= overlap * moveRatio1 * nx;
@@ -169,7 +169,7 @@ export default function Terrain(props: {
 
               let moveRatio2 = internalObjs.current[i].mass / totalMass;
               internalObjs.current[j].x += overlap * moveRatio2 * nx;
-              internalObjs.current[j].y += overlap * moveRatio2 * ny;*/
+              internalObjs.current[j].y += overlap * moveRatio2 * ny;
 
               let rvx = internalObjs.current[j].vx - internalObjs.current[i].vx;
               let rvy = internalObjs.current[j].vy - internalObjs.current[i].vy;
@@ -183,7 +183,7 @@ export default function Terrain(props: {
                   (1 / internalObjs.current[i].mass +
                     1 / internalObjs.current[j].mass);
 
-                /*internalObjs.current[i].vx -=
+                internalObjs.current[i].vx -=
                   (impulseScalar * nx) / internalObjs.current[i].mass;
                 internalObjs.current[i].vy -=
                   (impulseScalar * ny) / internalObjs.current[i].mass;
@@ -191,7 +191,17 @@ export default function Terrain(props: {
                 internalObjs.current[j].vx +=
                   (impulseScalar * nx) / internalObjs.current[j].mass;
                 internalObjs.current[j].vy +=
-                  (impulseScalar * ny) / internalObjs.current[j].mass;*/
+                  (impulseScalar * ny) / internalObjs.current[j].mass;
+
+                if (isNaN(internalObjs.current[i].vx))
+                  internalObjs.current[i].vx = 0;
+                if (isNaN(internalObjs.current[i].vy))
+                  internalObjs.current[i].vy = 0;
+
+                if (isNaN(internalObjs.current[j].vx))
+                  internalObjs.current[j].vx = 0;
+                if (isNaN(internalObjs.current[j].vy))
+                  internalObjs.current[j].vy = 0;
               }
             }
           }
