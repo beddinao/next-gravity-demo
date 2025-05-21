@@ -34,6 +34,8 @@ export default function Panel(props: {
     ay: number
   ) => Promise<void>;
   remove: (id: number) => Promise<void>;
+  target_mass: number;
+  setTarget_mass: any;
 }) {
   const [s_id, setS_id] = useState<number>(0);
   const [s_name, setS_name] = useState<string>("");

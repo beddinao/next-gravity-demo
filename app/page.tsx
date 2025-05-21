@@ -24,6 +24,7 @@ interface Item {
 export default function Home() {
   
   const [objects, setObjects] = useState<Object[]>([]);
+  const [target_mass, setTarget_mass] = useState<number>(0);
 
   useEffect(() => {
     fetchObjects();
@@ -94,6 +95,8 @@ export default function Home() {
             read={fetchObjects}
             update={updateObject}
             remove={deleteObjects}
+            target_mass={target_mass}
+            setTarget_mass={setTarget_mass}
           />
         <ul>
           <li>to create new objects click on the canvas</li>
@@ -108,6 +111,7 @@ export default function Home() {
           create={(x: number, y: number) => {
             addObject(rand_str(), rand_num(20, 100), rand_num(3, 30), rand_num(10, 255), rand_num(10, 255), rand_num(10, 255), x, y, 0, 0, 0, 0);
           }}
+          target_mass={target_mass}
         />
       </div>
 

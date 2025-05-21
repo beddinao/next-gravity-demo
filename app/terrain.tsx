@@ -4,6 +4,7 @@ import { Object } from "@prisma/client";
 export default function Terrain(props: {
   objs: any[];
   create: (x: number, y: number) => void;
+  target_mass: number;
 }) {
   const [canvasRefresh, setCanvasRefresh] = useState<boolean>(false);
   var internalObjs = useRef<any>([]),
@@ -12,9 +13,11 @@ export default function Terrain(props: {
     margin_y = useRef<number>(0),
     canvasRefreshRef = useRef<boolean>(false);
 
+  var target_massRef = useRef<number>(props.target_mass);
+
   var ctx,
-    w: number | undefined,
-    h: number | undefined,
+    w: number,
+    h: number,
     dt = 0.07,
     g = 39.5,
     soft_c = 0.15;
@@ -44,7 +47,15 @@ export default function Terrain(props: {
   ///////////////////////// ANIMATE ///////////////////////////
 
   var animate = (ctx: any) => {
-    ctx.clearRect(0, 0, w, h);
+    let mass_i = {x: 0, y: 0};
+
+    if (internalObjs.current && internalObjs.current.length) {
+      mass_i.x = internalObjs.current[target_massRef.current].x;
+      mass_i.y = internalObjs.current[target_massRef.current].y;
+    }
+
+    ctx.clearRect(mass_i.x - ( w / 2 )  , mass_i.y - ( h / 2 )  , w  , h  ) ;
+    //ctx.clearRect(0, 0, w, h);
     draw_background(ctx);
     //ctx.strokeStyle = "#ffffff";
     //ctx.strokeStyle = "#4287f5";
@@ -83,7 +94,7 @@ export default function Terrain(props: {
         internalObjs.current[i].vx += internalObjs.current[i].ax * dt;
         internalObjs.current[i].vy += internalObjs.current[i].ay * dt;
         // WALL CHECK
-        if (w) {
+        /*if (w) {
           if (internalObjs.current[i].x < 0 || internalObjs.current[i].x > w) {
             if (!internalObjs.current[i].reversed_x) {
               internalObjs.current[i].vx *= -1;
@@ -98,7 +109,7 @@ export default function Terrain(props: {
               internalObjs.current[i].reversed_y = true;
             }
           } else internalObjs.current[i].reversed_y = false;
-        }
+        }*/
 
         ///////////////////////////
 
@@ -107,6 +118,7 @@ export default function Terrain(props: {
         // COLORS SETUP
         ctx.strokeStyle = `rgb(${internalObjs.current[i].red}, ${internalObjs.current[i].green}, ${internalObjs.current[i].blue})`;
         ctx.fillStyle = `rgb(${internalObjs.current[i].red}, ${internalObjs.current[i].green}, ${internalObjs.current[i].blue})`;
+        
         // DRAW TEXT
         ctx.globalAlpha = 1;
         ctx.fillText(
@@ -161,7 +173,7 @@ export default function Terrain(props: {
                 (internalObjs.current[j].y - internalObjs.current[i].y) /
                 dist_sq;
 
-              let totalMass =
+              /*let totalMass =
                 internalObjs.current[i].mass + internalObjs.current[j].mass;
               let moveRatio1 = internalObjs.current[j].mass / totalMass;
               internalObjs.current[i].x -= overlap * moveRatio1 * nx;
@@ -169,7 +181,7 @@ export default function Terrain(props: {
 
               let moveRatio2 = internalObjs.current[i].mass / totalMass;
               internalObjs.current[j].x += overlap * moveRatio2 * nx;
-              internalObjs.current[j].y += overlap * moveRatio2 * ny;
+              internalObjs.current[j].y += overlap * moveRatio2 * ny;*/
 
               let rvx = internalObjs.current[j].vx - internalObjs.current[i].vx;
               let rvy = internalObjs.current[j].vy - internalObjs.current[i].vy;
@@ -209,6 +221,15 @@ export default function Terrain(props: {
       }
 
       /////////////////////
+
+      if (internalObjs.current && internalObjs.current.length) {
+        ctx.resetTransform();
+        ctx.translate(
+          - (internalObjs.current[target_massRef.current].x - (w / 2)),
+          - (internalObjs.current[target_massRef.current].y - (h / 2))
+        );
+    }
+
     }
     refRequestAnimationFrame(ctx);
   };
@@ -258,6 +279,10 @@ export default function Terrain(props: {
   useEffect(() => {
     internalObjs.current = props.objs;
   }, [props.objs]);
+
+  useEffect(() => {
+    target_massRef.current = props.target_mass;
+  }, [props.target_mass]);
 
   return (
     <div id="terrain">
