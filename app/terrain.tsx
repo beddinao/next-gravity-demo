@@ -13,17 +13,17 @@ export default function  Terrain(props: { objs: any[], create: (x: number, y: nu
 	      dt = 0.07, g = 39.5, soft_c = 0.15;
 
 	var draw_background = (ctx: any) => {
-		ctx.strokeStyle = "#a19f9f";
+		ctx.strokeStyle = "#807e7e";
 		if (w == undefined || h == undefined)
 			return;
-		for (let i = 0; i < w; i += 20) {
+		for (let i = 0; i < w; i += 10) {
 			ctx.beginPath();
 			ctx.moveTo(i, 0);
 			ctx.lineTo(i, h);
 			ctx.stroke();
 		}
 
-		for (let i = 0; i < h; i += 20) {
+		for (let i = 0; i < h; i += 10) {
 			ctx.beginPath();
 			ctx.moveTo(0, i);
 			ctx.lineTo(w, i);
