@@ -100,6 +100,7 @@ export default function Home() {
           <li>use the side panel to edit an object properties (make sure to click save) or remove them</li>
           <li>objects themselves and their initial settings are stored in the database and updated upon editing, creation and deleting (does not get updated per frame).</li>
           <li>used Next.js, TypeScript, SQLite, and Prisma</li>
+          <li>repository: <a href="https://github.com/beddinao/next-gravity-demo">beddinao/next-gravity-demo</a></li>
         </ul>
       </div>
       <div>
