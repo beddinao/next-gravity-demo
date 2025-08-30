@@ -1,106 +1,189 @@
-import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function GET() {
-	try {
-		const objects = await prisma.object.findMany();
-		return NextResponse.json(objects);
-	} catch (error) {
-		console.warn("GET: ", error);
-		return NextResponse.json({ error: 'Failed to fetch objects' }, { status: 500 });
-	}
+  try {
+    const objects = await prisma.object.findMany();
+    return NextResponse.json(objects);
+  } catch (error) {
+    console.warn("GET: ", error);
+    return NextResponse.json(
+      { error: "Failed to fetch objects" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: Request) {
-	try {
-		var contentType = request.headers.get('content-type');
-		if (!contentType || contentType === undefined)
-			contentType = request.headers.get('Content-Type');
-		if (!contentType || contentType === undefined || contentType !== 'application/json')
-			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
+  try {
+    var contentType = request.headers.get("content-type");
+    if (!contentType || contentType === undefined)
+      contentType = request.headers.get("Content-Type");
+    if (
+      !contentType ||
+      contentType === undefined ||
+      contentType !== "application/json"
+    )
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
 
-		const { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay } = await request.json();
-		
-		if (!name || name.length > 20 || !name.length || radius < 0 || radius > 400
-		   || red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255
-		   || mass < 0 || mass > 10000 || x > 10000 || y > 10000 || vx > 10000
-		   || ax > 10000 || ay > 10000) {
-			   return NextResponse.json({error: 'Invaild input'}, {status: 400});
-		   }
+    const { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay } =
+      await request.json();
 
-		const newObject = await prisma.object.create({
-			data: { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay },
-		});
-		return NextResponse.json(newObject, { status: 201 });
-	} catch (error) {
-		console.warn("POST:", error);
-		return NextResponse.json({ error: 'Failed to create object' }, { status: 500 });
-	}
+    if (
+      !name ||
+      name.length > 20 ||
+      !name.length ||
+      radius < 0 ||
+      radius > 400 ||
+      red < 0 ||
+      red > 255 ||
+      green < 0 ||
+      green > 255 ||
+      blue < 0 ||
+      blue > 255 ||
+      mass < 0 ||
+      mass > 10000 ||
+      x > 10000 ||
+      y > 10000 ||
+      vx > 10000 ||
+      ax > 10000 ||
+      ay > 10000
+    ) {
+      return NextResponse.json({ error: "Invaild input" }, { status: 400 });
+    }
+
+    const objects = await prisma.object.findMany();
+
+    for (let i = 0; i < objects.length; i++) {
+      if (
+        objects[i].x < x + radius * 2 &&
+        objects[i].x + objects[i].radius * 2 > x &&
+        objects[i].y < y + radius * 2 &&
+        objects[i].y + radius * 2 > y
+      ) {
+        return NextResponse.json(
+          { error: "Cant create object above another one;" },
+          { status: 400 }
+        );
+      }
+    }
+
+    const newObject = await prisma.object.create({
+      data: { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay },
+    });
+    return NextResponse.json(newObject, { status: 201 });
+  } catch (error) {
+    console.warn("POST:", error);
+    return NextResponse.json(
+      { error: `Failed to create object` },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PUT(request: Request) {
-	try {
-		var	contentType = request.headers.get('content-type');
-		if (!contentType || contentType === undefined) contentType = request.headers.get('Content-Type');
-		if (!contentType || contentType === undefined || contentType !== 'application/json')
-			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
+  try {
+    var contentType = request.headers.get("content-type");
+    if (!contentType || contentType === undefined)
+      contentType = request.headers.get("Content-Type");
+    if (
+      !contentType ||
+      contentType === undefined ||
+      contentType !== "application/json"
+    )
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
 
-		const { id, name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay } = await request.json();
-		const parsedId = parseInt(id, 10);
+    const { id, name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay } =
+      await request.json();
+    const parsedId = parseInt(id, 10);
 
-		if (isNaN(parsedId) || id < 0 || id > 10000 || !name || name.length > 20 || !name.length || radius < 0 || radius > 400
-		   || red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255
-		   || mass < 0 || mass > 10000 || x < 0 || x > 10000 || y < 0 || y > 10000 || vx > 10000
-		   || ax > 10000 || ay > 10000) {
-			return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
-		}
+    if (
+      isNaN(parsedId) ||
+      id < 0 ||
+      id > 10000 ||
+      !name ||
+      name.length > 20 ||
+      !name.length ||
+      radius < 0 ||
+      radius > 400 ||
+      red < 0 ||
+      red > 255 ||
+      green < 0 ||
+      green > 255 ||
+      blue < 0 ||
+      blue > 255 ||
+      mass < 0 ||
+      mass > 10000 ||
+      x < 0 ||
+      x > 10000 ||
+      y < 0 ||
+      y > 10000 ||
+      vx > 10000 ||
+      ax > 10000 ||
+      ay > 10000
+    ) {
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    }
 
-		const checked_obj = await prisma.object.findUnique({
-			where: { id: parsedId },
-		});
+    const checked_obj = await prisma.object.findUnique({
+      where: { id: parsedId },
+    });
 
-		if (!checked_obj) return NextResponse.json({ error: 'Object not found' }, { status: 404 });
+    if (!checked_obj)
+      return NextResponse.json({ error: "Object not found" }, { status: 404 });
 
-		const updatedObject = await prisma.object.update({
-			where: { id: parsedId },
-			data: { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay },
-		});
-		return NextResponse.json(updatedObject, { status: 200 });
-	} catch (error) {
-		console.warn("PUT:", error);
-		return NextResponse.json({ error: 'Failed to update object' }, { status: 500 });
-	}
+    const updatedObject = await prisma.object.update({
+      where: { id: parsedId },
+      data: { name, radius, mass, red, green, blue, x, y, vx, vy, ax, ay },
+    });
+    return NextResponse.json(updatedObject, { status: 200 });
+  } catch (error) {
+    console.warn("PUT:", error);
+    return NextResponse.json(
+      { error: "Failed to update object" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE(request: Request) {
-	try {
-		var	contentType = request.headers.get('content-type');
-		if (!contentType || contentType === undefined) contentType = request.headers.get('Content-Type');
-		if (!contentType || contentType === undefined || contentType !== 'application/json')
-			return	NextResponse.json({error: 'Invalid request'}, {status: 400});
+  try {
+    var contentType = request.headers.get("content-type");
+    if (!contentType || contentType === undefined)
+      contentType = request.headers.get("Content-Type");
+    if (
+      !contentType ||
+      contentType === undefined ||
+      contentType !== "application/json"
+    )
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
 
-		const { id } = await request.json();
-		const parsedId = parseInt(id, 10);
+    const { id } = await request.json();
+    const parsedId = parseInt(id, 10);
 
-		if (isNaN(parsedId) || id < 0 || id > 10000) {
-			return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
-		}
+    if (isNaN(parsedId) || id < 0 || id > 10000) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    }
 
-		const checked_obj = await prisma.object.findUnique({
-			where: { id: parsedId },
-		});
+    const checked_obj = await prisma.object.findUnique({
+      where: { id: parsedId },
+    });
 
-		if (!checked_obj) return NextResponse.json({ error: 'Object not found'}, { status: 404 });
+    if (!checked_obj)
+      return NextResponse.json({ error: "Object not found" }, { status: 404 });
 
-		await prisma.object.delete({
-			where: { id: parsedId },
-		});
+    await prisma.object.delete({
+      where: { id: parsedId },
+    });
 
-		return NextResponse.json(null, { status: 200 });
-	} catch (error) {	
-		console.warn("DELETE: ", error);
-		return NextResponse.json({ error: 'Failed to delete object' }, { status: 500 });
-	}
+    return NextResponse.json(null, { status: 200 });
+  } catch (error) {
+    console.warn("DELETE: ", error);
+    return NextResponse.json(
+      { error: "Failed to delete object" },
+      { status: 500 }
+    );
+  }
 }
