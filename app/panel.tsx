@@ -132,14 +132,14 @@ export default function Panel (props: { objs: any, create: (name: string, radius
 					let target = props.objs.find((obj: Object) => (obj as Object).id == s_id);
 					if (target != undefined) {
 						props.update(s_id, s_name, s_radius, s_mass, s_red, s_green, s_blue, s_x, s_y, s_vx, s_vy, s_ax, s_ay);
-						props.read();
+						//props.read();
 					}
 				}} >SAVE</button>
 			<button onClick={() => {
 				let target = props.objs.find((obj: Object) => (obj as Object).id == s_id);
 				if (target != undefined) {
 					props.remove(target.id);
-					props.read();
+					//props.read();
 				}
 			}} >DELETE</button>
 			</div>
